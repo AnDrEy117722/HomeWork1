@@ -1,5 +1,6 @@
 package ru.TechPark.Homework1;
 
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,5 +38,20 @@ class NumbersAdapter extends RecyclerView.Adapter<NumbersViewHolder> {
     @Override
     public int getItemCount() {
         return number.size();
+    }
+
+    public static void Add(View v, RecyclerView recyclerView, List<NumbersModel> number) {
+        int color;
+        if ((number.size() + 1) % 2 == 0) {
+            color = Color.BLUE;
+        } else {
+            color = Color.RED;
+        }
+        number.add(new NumbersModel(number.size() + 1, color));
+        if (recyclerView == null) {
+            recyclerView = v.findViewById(R.id.numbers_feed);
+        }
+        recyclerView.getAdapter().notifyItemInserted(number.size()-1);
+        recyclerView.smoothScrollToPosition(number.size()-1);
     }
 }

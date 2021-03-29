@@ -30,7 +30,16 @@ public class FragmentListNumber extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.list_number_fragment, container, false);
+        View v = inflater.inflate(R.layout.list_number_fragment, container, false);
+
+        Button addNumber = v.findViewById(R.id.add_number);
+        addNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NumbersAdapter.Add(v, recyclerView, number);
+            }
+        });
+        return v;
     }
 
     @Override
@@ -42,36 +51,17 @@ public class FragmentListNumber extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (recyclerView == null) {
-            recyclerView = getActivity().findViewById(R.id.numbers_feed);
+            recyclerView = view.findViewById(R.id.numbers_feed);
         }
-        final GridLayoutManager layoutManager = new GridLayoutManager(getActivity(),
+        final GridLayoutManager layoutManager = new GridLayoutManager(requireContext(),
                 getResources().getInteger(R.integer.orient));
         recyclerView.setLayoutManager(layoutManager);
 
-        if (getActivity() instanceof CallBackListener) {
-            this.callBackListener = (CallBackListener) getActivity();
+        if (requireContext() instanceof CallBackListener) {
+            this.callBackListener = (CallBackListener) requireContext();
         }
         Log.d("test", callBackListener + "1");
         recyclerView.setAdapter(new NumbersAdapter(this.callBackListener));
-
-        Button addNumber = getActivity().findViewById(R.id.add_number);
-        addNumber.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int color;
-                if ((number.size() + 1) % 2 == 0) {
-                    color = Color.BLUE;
-                } else {
-                    color = Color.RED;
-                }
-                number.add(new NumbersModel(number.size() + 1, color));
-                if (recyclerView == null) {
-                    recyclerView = getActivity().findViewById(R.id.numbers_feed);
-                }
-                recyclerView.getAdapter().notifyItemInserted(number.size()-1);
-                recyclerView.smoothScrollToPosition(number.size()-1);
-            }
-        });
     }
 
     @Override
