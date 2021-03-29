@@ -1,5 +1,6 @@
 package ru.TechPark.Homework1;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,11 @@ import java.util.List;
 class NumbersAdapter extends RecyclerView.Adapter<NumbersViewHolder> {
 
     List<NumbersModel> number = NumberSource.getInstance().getRemoteData();
+    private final CallBackListener callBackListener;
+
+    public NumbersAdapter(CallBackListener callBackListener) {
+        this.callBackListener = callBackListener;
+    }
 
     @NonNull
     @Override
@@ -23,7 +29,8 @@ class NumbersAdapter extends RecyclerView.Adapter<NumbersViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull NumbersViewHolder holder, int position) {
         NumbersModel model = number.get(position);
-        holder.bind(model);
+        Log.d("test", callBackListener + "2");
+        holder.bind(model, this.callBackListener);
 
     }
 

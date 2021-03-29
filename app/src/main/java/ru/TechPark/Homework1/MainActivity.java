@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity implements CallBackListener 
         }
     }
 
-    public void showNextActivity(View view) {
+    @Override
+    public void onCallBack(View view) {
         Button button = (Button) view;
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -49,18 +50,5 @@ public class MainActivity extends AppCompatActivity implements CallBackListener 
 
         transaction.addToBackStack(null);
         transaction.commit();
-    }
-
-    @Override
-    public void onCallBack(RecyclerView recyclerView, Button addNumber) {
-        int color;
-        if ((number.size() + 1) % 2 == 0) {
-            color = Color.BLUE;
-        } else {
-            color = Color.RED;
-        }
-        number.add(new NumbersModel(number.size() + 1, color));
-        recyclerView.getAdapter().notifyItemInserted(number.size()-1);
-        recyclerView.smoothScrollToPosition(number.size()-1);
     }
 }

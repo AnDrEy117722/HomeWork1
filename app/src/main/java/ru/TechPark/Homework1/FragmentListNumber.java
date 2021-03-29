@@ -27,9 +27,6 @@ public class FragmentListNumber extends Fragment {
 
     private CallBackListener callBackListener;
 
-    public FragmentListNumber() {
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,28 +36,40 @@ public class FragmentListNumber extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (getActivity() instanceof CallBackListener) {
-            callBackListener = (CallBackListener) getActivity();
-        }
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (recyclerView == null) {
             recyclerView = getActivity().findViewById(R.id.numbers_feed);
         }
         final GridLayoutManager layoutManager = new GridLayoutManager(getActivity(),
                 getResources().getInteger(R.integer.orient));
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new NumbersAdapter());
-    }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Button addNumber = (Button) view.findViewById(R.id.add_number);
+        if (getActivity() instanceof CallBackListener) {
+            this.callBackListener = (CallBackListener) getActivity();
+        }
+        Log.d("test", callBackListener + "1");
+        recyclerView.setAdapter(new NumbersAdapter(this.callBackListener));
+
+        Button addNumber = getActivity().findViewById(R.id.add_number);
         addNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(callBackListener != null)
-                    callBackListener.onCallBack(recyclerView, addNumber);
-
+                int color;
+                if ((number.size() + 1) % 2 == 0) {
+                    color = Color.BLUE;
+                } else {
+                    color = Color.RED;
+                }
+                number.add(new NumbersModel(number.size() + 1, color));
+                if (recyclerView == null) {
+                    recyclerView = getActivity().findViewById(R.id.numbers_feed);
+                }
+                recyclerView.getAdapter().notifyItemInserted(number.size()-1);
+                recyclerView.smoothScrollToPosition(number.size()-1);
             }
         });
     }

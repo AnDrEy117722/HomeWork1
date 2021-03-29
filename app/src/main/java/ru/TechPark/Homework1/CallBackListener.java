@@ -1,9 +1,7 @@
 package ru.TechPark.Homework1;
 
-import android.widget.Button;
-
-import androidx.recyclerview.widget.RecyclerView;
+import android.view.View;
 
 public interface CallBackListener {
-    void onCallBack(RecyclerView recyclerView, Button button);
+    void onCallBack(View view);
 }
